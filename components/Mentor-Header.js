@@ -42,9 +42,7 @@ export default function Header() {
                 onMouseEnter={() => setIsOpen(true)}
                 onMouseLeave={() => {
                   setTimeout(() => setIsOpen(false), 1000);
-                }}
-                
-              >
+                }}>
                 <button className="text-black font-medium hover:underline">Profile</button>
 
                 {isOpen && (

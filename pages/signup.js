@@ -1,44 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function Signup() {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState('consumer');
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
-  const [locationError, setLocationError] = useState('');
+  const [role, setRole] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
-  const [organization, setOrg] = useState('');
-  const [branch, setBranch] = useState('');
   const [phone, setPhoneNo] = useState('');
+  const router = useRouter();
 
-  // Automatically fetch user's location
-  const getLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLatitude(position.coords.latitude);
-          setLongitude(position.coords.longitude);
-          setLocationError('');
-        },
-        (error) => {
-          setLocationError('Unable to retrieve your location. Please enable location access.');
-          console.error('Geolocation error:', error);
-        }
-      );
-    } else {
-      setLocationError('Geolocation is not supported by your browser.');
-    }
-  };
-
-  useEffect(() => {
-    getLocation(); // Fetch location when the component mounts
-  }, []);
+  
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -51,9 +28,15 @@ export default function Signup() {
       return;
     }
   
-    // Validate location
-    if (!latitude || !longitude) {
-      setError('Please enable location access to proceed.');
+    // Email validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+  
+    // Password validation
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long.');
       return;
     }
   
@@ -65,57 +48,48 @@ export default function Signup() {
       });
   
       if (signupError) {
-        throw signupError;
+        console.error('Signup Error:', signupError);
+        setError(signupError.message || 'User creation failed.');
+        return;
       }
+  
+      if (!user) {
+        console.error('No user returned from signup.');
+        setError('User creation failed. No user returned.');
+        return;
+      }
+  
+      console.log('User created:', user);
   
       // Insert user profile into profiles table
       const { error: profileError } = await supabase
         .from('profiles')
         .insert([{ 
-          user_id: user.id, 
+          id: user.id, // Use the user's ID as the primary key
+          name: name,
+          role: role,
           username: email, 
-          role, 
-          latitude, 
-          longitude,
-          organization,
-          branch,
           phone,
         }]);
   
       if (profileError) {
-        throw profileError;
+        console.error('Profile Insert Error:', profileError);
+        setError(profileError.message || 'Failed to create profile.');
+        return;
       }
   
-      setMessage('Check your email for the confirmation link!');
+      setMessage('Registration successful! Redirecting to Desired Job Customisation Page...');
+      router.push('/desired-job-customisation');
     } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  const handleGoogleSignup = async () => {
-    try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      // Redirect to dashboard after successful login
-      router.push('/dashboard');
-    } catch (error) {
-      console.error('Error logging in with Google:', error.message);
-      setError('Failed to log in with Google. Please try again.');
+      console.error('Error:', error);
+      setError(error.message || 'An unexpected error occurred.');
     }
   };
 
   return (
     <div className="min-h-screen flex">
       {/* Left Side: Image */}
-      <div className="hidden lg:block w-1/2 bg-cover bg-center" style={{ backgroundImage: `url('/intro-bgi.jpg')` }}>
-        {/* Replace '/intro-bgi.jpg' with your image path */}
-      </div>
+      <div className="hidden lg:block w-1/2 bg-cover bg-center" style={{ backgroundImage: `url('/intro-bgi.jpg')` }}></div>
 
       {/* Right Side: Signup Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center bg-gray-50">
@@ -123,6 +97,19 @@ export default function Signup() {
           <h1 className="text-2xl font-bold mb-6">Sign Up</h1>
 
           <form onSubmit={handleSignup}>
+            {/* Name Input */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2">Name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full p-2 border rounded"
+                required
+              />
+            </div>
+
+            {/* Email Input */}
             <div className="mb-4">
               <label className="block text-sm font-medium mb-2">Email</label>
               <input
@@ -133,36 +120,29 @@ export default function Signup() {
                 required
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Organization Name</label>
-              <input
-                type="text"
-                value={organization}
-                onChange={(e) => setOrg(e.target.value)}
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Branch</label>
-              <input
-                type="text"
-                value={branch}
-                onChange={(e) => setBranch(e.target.value)}
-                className="w-full p-2 border rounded"
-                required
-              />
-            </div>
+
+            {/* Phone Input */}
             <div className="mb-4">
               <label className="block text-sm font-medium mb-2">Phone Number</label>
               <input
-                type="phone"
+                type="tel"
                 value={phone}
                 onChange={(e) => setPhoneNo(e.target.value)}
                 className="w-full p-2 border rounded"
                 required
               />
             </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2">Role</label>
+              <input
+                type="text"
+                value={role}
+                onChange={(e) => setRole(e.target.value)} 
+                className="w-full p-2 border rounded"
+                required
+              />
+            </div>
+            {/* Password Inputs */}
             <div className="mb-4">
               <label className="block text-sm font-medium mb-2">Password</label>
               <input
@@ -183,31 +163,10 @@ export default function Signup() {
                 required
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Location</label>
-              {latitude && longitude ? (
-                <p className='text-green-500'> Successfully fetched your location!</p>
-              ) : (
-                <p className="text-sm text-gray-600">Fetching your location...</p>
-              )}
-              {locationError && (
-                <p className="text-sm text-red-500">{locationError}</p>
-              )}
-            </div>
-            <div className="mb-6">
-              <label className="block text-sm font-medium mb-2">Select Role</label>
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="w-full p-2 border rounded"
-                required
-              >
-                <option value="consumer">Consumer</option>
-                <option value="seller">Seller</option>
-              </select>
-            </div>
+
             {error && <p className="text-red-500 mb-4">{error}</p>}
             {message && <p className="text-green-500 mb-4">{message}</p>}
+
             <button
               type="submit"
               className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 mb-3"
@@ -215,14 +174,15 @@ export default function Signup() {
               Sign Up
             </button>
           </form>
-          {/* <center><p className='font-medium mb-2 mt-1'>Or</p></center>
-          {/* Google Signup Button 
+
+          {/* Google Signup Button
+          <center><p className='font-medium mb-2 mt-1'>Or</p></center>
           <button
             onClick={handleGoogleSignup}
             className="flex items-center justify-center bg-white border border-gray-300 p-2 rounded-lg hover:bg-gray-50 transition-all w-full mb-6"
           >
             <Image
-              src="/google.png" // Replace with your Google icon path
+              src="/google.png"
               alt="Google"
               width={100}
               height={20}
@@ -230,6 +190,8 @@ export default function Signup() {
             />
             <span className="ml-2 text-sm">Sign up with Google</span>
           </button> */}
+
+          {/* Login Link */}
           <p className="mt-4 text-center">
             Already have an account?{' '}
             <Link href="/login" className="text-blue-500 hover:underline">
