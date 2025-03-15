@@ -13,7 +13,7 @@ export default function Header() {
         <Link href="/">
           <div className="flex items-center mb-2">
           <Image
-              src="/logo-actual.jpg" // Replace with your logo path
+              src="/logo-actual.png" // Replace with your logo path
               alt="CareerCraft Logo"
               width={100}
               height={100}
