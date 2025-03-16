@@ -16,68 +16,80 @@ export default function DesiredJobCustomisation() {
     e.preventDefault();
     setError('');
     setMessage('');
-
+  
     // Validate required fields
     if (!jobDescription) {
       setError('Job Description is required.');
       return;
     }
-
+  
     if (userType === 'professional' && (!currRole || !yearsOfExperience)) {
       setError('Current Role and Years of Experience are required for professionals.');
       return;
     }
-
+  
     try {
       // Handle file upload if jobDescriptionType is 'doc'
       let jobDescriptionValue = jobDescription;
       if (jobDescriptionType === 'doc') {
         const fileInput = e.target.querySelector('input[type="file"]');
         const file = fileInput?.files[0];
-
+  
         if (!file) {
           setError('Please select a file to upload.');
           return;
         }
-
+  
         // Upload file to Supabase Storage
         const { data: uploadData, error: uploadError } = await supabase
           .storage
-          .from('job-documents') // Your bucket name
+          .from('job-documents')
           .upload(`documents/${file.name}`, file);
-
+  
         if (uploadError) {
           console.error('File Upload Error:', uploadError);
           setError('Failed to upload document.');
           return;
         }
-
+  
         // Get the file URL
         const { data: urlData } = supabase
           .storage
           .from('job-documents')
           .getPublicUrl(uploadData.path);
-
+  
+        console.log('File Uploaded Successfully. URL:', urlData.publicUrl);
         jobDescriptionValue = urlData.publicUrl;
       }
-
+  
+      // Log data being inserted
+      console.log('Data to be inserted:', {
+        job_description: jobDescriptionValue,
+        job_description_type: jobDescriptionType,
+        user_type: userType,
+        curr_role: userType === 'professional' ? currRole : null,
+        years_of_experience: userType === 'professional' ? parseInt(yearsOfExperience, 10) : null,
+      });
+  
       // Save data to Supabase
       const { error: insertError } = await supabase
-        .from('job_customisation') // Table name
-        .insert([{
-          job_description: jobDescriptionValue, // Job description (link, doc URL, or role name)
-          job_description_type: jobDescriptionType, // 'link', 'doc', or 'role'
-          user_type: userType, // 'student' or 'professional'
-          curr_role: currRole, // Only for professionals
-          years_of_experience: yearsOfExperience, // Only for professionals
-        }]);
-
+        .from('job_customisation')
+        .insert([
+          {
+            job_description: jobDescriptionValue,
+            job_description_type: jobDescriptionType,
+            user_type: userType,
+            curr_role: userType === 'professional' ? currRole : null,
+            years_of_experience: userType === 'professional' ? parseInt(yearsOfExperience, 10) : null,
+          },
+        ]);
+  
       if (insertError) {
         console.error('Insert Error:', insertError);
         setError('Failed to save preferences. Please try again.');
         return;
       }
-
+  
       setMessage('Your preferences have been saved successfully!');
     } catch (error) {
       console.error('Error:', error);

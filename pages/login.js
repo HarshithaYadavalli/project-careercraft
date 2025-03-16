@@ -21,43 +21,34 @@ export default function Login() {
     });
 
     if (loginError) {
+      console.error('Login Error:', loginError); // Log the error
       setError('Invalid email or password');
-    } else {
-      // Fetch user profile from profiles table using the user's ID
-      const { data: profile, error: profileError } = await supabase
-        .from('profiles')
-        .select('username, role')
-        .eq('id', user.id) // Use 'id' instead of 'user_id'
-        .maybeSingle();
-
-      if (profileError) {
-        setError('Error fetching user profile');
-      } else {
-        // Redirect based on the user's role
-        if (profile.role === 'student') {
-          router.push('/student-dashboard');
-        } else {
-          router.push('/mentor-dashboard');
-        }
-      }
+      return;
     }
-  };
 
-  const handleGoogleLogin = async () => {
-    try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-      });
+    console.log('User ID from Auth:', user.id); // Log the user ID
 
-      if (error) {
-        throw error;
+const { data: profile, error: profileError } = await supabase
+  .from('profiles')
+  .select('username, role')
+  .eq('id', user.id)
+  .maybeSingle();
+
+if (profileError) {
+  console.error('Profile Fetch Error:', profileError); // Log the error
+  setError('Error fetching user profile');
+} else if (!profile) {
+  console.error('Profile not found for user ID:', user.id); // Log missing profile
+  setError('Profile not found');
+} 
+   else {
+  console.log('Profile fetched successfully:', profile); // Log success
+      // Redirect based on the user's role
+      if (profile.role === 'student') {
+        router.push('/student-dashboard');
+      } else {
+        router.push('/mentor-dashboard');
       }
-
-      // Redirect to dashboard after successful login
-      router.push('/dashboard');
-    } catch (error) {
-      console.error('Error logging in with Google:', error.message);
-      setError('Failed to log in with Google. Please try again.');
     }
   };
 
@@ -114,22 +105,6 @@ export default function Login() {
               Log In
             </button>
           </form>
-
-          {/* Google Login Button */}
-          {/* <center><p className='mb-5'>Or</p></center>
-          <button
-            onClick={handleGoogleLogin}
-            className="flex items-center justify-center bg-white border border-gray-300 p-3 rounded-lg hover:bg-gray-50 transition-all w-full"
-          >
-            <Image
-              src="/google.png"
-              alt="Google"
-              width={100}
-              height={20}
-              className="w-5 h-5"
-            />
-            <span className="ml-2 text-sm">Sign in with Google</span>
-          </button> */}
 
           {/* Sign Up Link */}
           <p className="mt-6 text-center text-sm text-gray-600">

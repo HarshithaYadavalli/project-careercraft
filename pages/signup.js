@@ -15,52 +15,50 @@ export default function Signup() {
   const [phone, setPhoneNo] = useState('');
   const router = useRouter();
 
-  
-
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
     setMessage('');
-  
+
     // Validate passwords match
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
-  
+
     // Email validation
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setError('Please enter a valid email address.');
       return;
     }
-  
+
     // Password validation
     if (password.length < 6) {
       setError('Password must be at least 6 characters long.');
       return;
     }
-  
+
     try {
       // Sign up with Supabase
       const { data: { user }, error: signupError } = await supabase.auth.signUp({
         email,
         password,
       });
-  
+
       if (signupError) {
         console.error('Signup Error:', signupError);
         setError(signupError.message || 'User creation failed.');
         return;
       }
-  
+
       if (!user) {
         console.error('No user returned from signup.');
         setError('User creation failed. No user returned.');
         return;
       }
-  
+
       console.log('User created:', user);
-  
+
       // Insert user profile into profiles table
       const { error: profileError } = await supabase
         .from('profiles')
@@ -71,13 +69,13 @@ export default function Signup() {
           username: email, 
           phone,
         }]);
-  
+
       if (profileError) {
         console.error('Profile Insert Error:', profileError);
         setError(profileError.message || 'Failed to create profile.');
         return;
       }
-  
+
       setMessage('Registration successful! Redirecting to Desired Job Customisation Page...');
       router.push('/desired-job-customisation');
     } catch (error) {
@@ -132,6 +130,8 @@ export default function Signup() {
                 required
               />
             </div>
+
+            {/* Role Input */}
             <div className="mb-4">
               <label className="block text-sm font-medium mb-2">Role</label>
               <input
@@ -142,6 +142,7 @@ export default function Signup() {
                 required
               />
             </div>
+
             {/* Password Inputs */}
             <div className="mb-4">
               <label className="block text-sm font-medium mb-2">Password</label>
@@ -174,22 +175,6 @@ export default function Signup() {
               Sign Up
             </button>
           </form>
-
-          {/* Google Signup Button
-          <center><p className='font-medium mb-2 mt-1'>Or</p></center>
-          <button
-            onClick={handleGoogleSignup}
-            className="flex items-center justify-center bg-white border border-gray-300 p-2 rounded-lg hover:bg-gray-50 transition-all w-full mb-6"
-          >
-            <Image
-              src="/google.png"
-              alt="Google"
-              width={100}
-              height={20}
-              className="w-5 h-5"
-            />
-            <span className="ml-2 text-sm">Sign up with Google</span>
-          </button> */}
 
           {/* Login Link */}
           <p className="mt-4 text-center">
