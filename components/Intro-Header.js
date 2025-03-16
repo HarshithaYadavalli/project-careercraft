@@ -32,6 +32,9 @@ export default function Header() {
               <Link href="https://forms.gle/YkyaFLeZzA2BQCTi6" className="hover:underline">Help</Link>
             </li>
             <li className="mx-2">
+              <Link href="/bookings" className="hover:underline">Bookings</Link> {/* Added Bookings link */}
+            </li>
+            <li className="mx-2">
               <Link href="/login" className="hover:underline">Login</Link>
             </li>
             <li className="mx-2">
