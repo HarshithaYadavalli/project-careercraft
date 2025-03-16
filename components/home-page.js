@@ -5,14 +5,13 @@ export default function HomePage() {
     <div className="snap-y snap-mandatory h-screen overflow-y-scroll">
       {/* Logo and 3-liner Description */}
       <section
-        className="snap-start h-screen flex flex-col items-center justify-center text-white"
-        style={{ backgroundColor: '#012130' }} // Apply the background color here
+        className="snap-start min-h-screen flex flex-col items-center justify-center text-white"
+        style={{ backgroundColor: '#012130' }}
       >
-        {/* Logo Container */}
-        <div className="text-center mb-20"> {/* Reduced margin-bottom (mb-8) to move the logo up */}
-          <div className="flex justify-center mb-10"> {/* Adjusted margin-bottom (mb-4) */}
+        <div className="text-center mb-20">
+          <div className="flex justify-center mb-10">
             <Image
-              src="/logo-actual.png" // Replace with your logo path
+              src="/logo-actual.png"
               alt="CareerCraft Logo"
               width={300}
               height={300}
@@ -34,8 +33,8 @@ export default function HomePage() {
 
       {/* What We Do Section */}
       <section
-        className="snap-start h-screen flex flex-col items-center justify-center text-black"
-        style={{ backgroundColor: '#DAFFFF' }} // Apply the background color here
+        className="snap-start min-h-screen flex flex-col items-center justify-center text-black"
+        style={{ backgroundColor: '#DAFFFF' }}
       >
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-2xl font-bold mb-4">What We Do</h2>
@@ -67,8 +66,8 @@ export default function HomePage() {
 
       {/* How It Works Section */}
       <section
-        className="snap-start h-screen flex flex-col items-center justify-center text-black"
-        style={{ backgroundColor: '#DAFFFF' }} // Apply the background color here
+        className="snap-start min-h-screen flex flex-col items-center justify-center text-black"
+        style={{ backgroundColor: '#DAFFFF' }}
       >
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-2xl font-bold mb-4">How It Works</h2>
@@ -98,10 +97,50 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Book a Session Section */}
+      <section
+        className="snap-start min-h-screen flex flex-col items-center justify-center text-black"
+        style={{ backgroundColor: '#DAFFFF' }}
+      >
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-2xl font-bold mb-4">Book a Session</h2>
+          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
+            Connect with professionals already working in your desired field. Book a session to discuss your career goals, ask questions, and decide if the job is the right fit for you.
+          </p>
+          <div className="mt-8">
+            <button
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+            >
+              Book a Session
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Mock Interviews Section */}
+      <section
+        className="snap-start min-h-screen flex flex-col items-center justify-center text-black"
+        style={{ backgroundColor: '#DAFFFF' }}
+      >
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-2xl font-bold mb-4">Mock Interviews</h2>
+          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
+            Practice mock interviews with industry experts to prepare for real job interviews. Gain confidence, improve your skills, and get feedback to ace your next interview.
+          </p>
+          <div className="mt-8">
+            <button
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+            >
+              Schedule a Mock Interview
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* About Us Section */}
       <section
-        className="snap-start h-screen flex flex-col items-center justify-center text-black"
-        style={{ backgroundColor: '#DAFFFF' }} // Apply the background color here
+        className="snap-start min-h-screen flex flex-col items-center justify-center text-black"
+        style={{ backgroundColor: '#DAFFFF' }}
       >
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-2xl font-bold mb-4">About Us</h2>
