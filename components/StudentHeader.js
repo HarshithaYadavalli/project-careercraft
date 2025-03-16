@@ -9,7 +9,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="p text-white" style={{ backgroundColor: '#C3C079' }}>
+    <header className="p text-white" style={{ backgroundColor: '#012130' }}>
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/">
           <div className="flex items-center mb-4">
@@ -24,12 +24,12 @@ export default function Header() {
         </Link>
 
         <nav>
-          <ul className="flex space-x-4 items-center text-m text-black mr-10">
-            <li className="mx-2">
-              <Link href="#footer" className="hover:underline">Contact Us</Link>
+          <ul className="flex space-x-4 items-center text-m text-white mr-10">
+          <li className="mx-2">
+              <Link href="#footer" className="hover:underline">Schedules</Link>
             </li>
             <li className="mx-2">
-              <Link href="https://forms.gle/YkyaFLeZzA2BQCTi6" className="hover:underline">Help</Link>
+              <Link href="#footer" className="hover:underline">Contact Us</Link>
             </li>
             {user ? (
               <li
@@ -40,31 +40,23 @@ export default function Header() {
                 }}
                 
               >
-                <button className="text-black font-medium hover:underline">Profile</button>
+                <button className="text-white font-medium hover:underline">Profile</button>
 
                 {isOpen && (
                   <ul className="absolute right-0 mt-2 w-48 bg-white text-black rounded-lg shadow-lg p-2 space-y-1 transition-opacity duration-200 ease-in-out">
                     <li>
                       <Link href="/profile" className="flex items-center space-x-2 hover:bg-gray-100 rounded p-2">
-                        <User className="w-4 h-4" /> <span>Profile</span>
+                        <User className="w-4 h-4" /> <span>Account</span>
                       </Link>
                     </li>
-                    <li>
-                      <Link href="/previous-orders" className="flex items-center space-x-2 hover:bg-gray-100 rounded p-2">
-                        <History className="w-4 h-4" /> <span>Previous Orders</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/settings" className="flex items-center space-x-2 hover:bg-gray-100 rounded p-2">
-                        <Settings className="w-4 h-4" /> <span>Settings</span>
-                      </Link>
-                    </li>
+                    <li className="mx-2">
+                      <Link href="/help" className="flex items-center space-x-2 hover:bg-gray-100 rounded p-2">Help</Link>
+                  </li>
                     <li>
                       <Link
                           href="/"
                           onClick={logout}
-                          className="flex items-center space-x-2 text-red-600 hover:bg-gray-100 rounded p-2 cursor-pointer"
-                        >
+                          className="flex items-center space-x-2 text-red-600 hover:bg-gray-100 rounded p-2 cursor-pointer">
                           <span>Logout</span>
                         </Link>
                       </li>
