@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer id="footer" className="text-white py-12" style={{ backgroundColor: '#76a2a2' }}>
+    <footer id="footer" className="text-white py-12" style={{ backgroundColor: '#012130' }}>
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo and Mission */}
@@ -14,12 +14,11 @@ export default function Footer() {
                 alt="CareerCraft Logo"
                 width={150}
                 height={150}
-                style={{ backgroundColor: '#76a2a2' }}
                 className="object-contain"
               />
             </div>
             <p className="text-sm text-gray-300">
-              We are dedicated to reducing food waste and connecting surplus food with those in need. Join us in making a difference!
+              CareerCraft empowers job seekers by providing personalized course recommendations and resources to help them become the best fit for their dream jobs. Start crafting your career today!
             </p>
           </div>
 
@@ -28,16 +27,16 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="text-sm text-gray-300">
               <li className="mb-2">
-                <a href="#" className="hover:underline">How It Works</a>
+                <Link href="/how-it-works" className="hover:underline">How It Works</Link>
               </li>
               <li className="mb-2">
-                <a href="#" className="hover:underline">Get Involved</a>
+                <Link href="/upload-resume" className="hover:underline">Upload Resume</Link>
               </li>
               <li className="mb-2">
-                <a href="#" className="hover:underline">Partners</a>
+                <Link href="/courses" className="hover:underline">Recommended Courses</Link>
               </li>
               <li className="mb-2">
-                <a href="#" className="hover:underline">FAQs</a>
+                <Link href="/faqs" className="hover:underline">FAQs</Link>
               </li>
             </ul>
           </div>
@@ -53,7 +52,7 @@ export default function Footer() {
                 <a href="tel:+1234567890" className="hover:underline">+1 (234) 567-890</a>
               </li>
               <li className="mb-2">
-                <p>123 Food Rescue St, City, Country</p>
+                <p>123 CareerCraft St, City, Country</p>
               </li>
             </ul>
           </div>
@@ -62,7 +61,7 @@ export default function Footer() {
           <div className="mb-6">
             <h3 className="text-lg font-semibold mb-4">Stay Updated</h3>
             <p className="text-sm text-gray-300 mb-4">
-              Subscribe to our newsletter for the latest updates and tips on reducing food waste.
+              Subscribe to our newsletter for the latest career tips, course recommendations, and job insights.
             </p>
             <form className="flex">
               <input
@@ -73,7 +72,7 @@ export default function Footer() {
               />
               <button
                 type="submit"
-                className="bg-blue-800 text-white px-4 rounded-r hover:bg-blue-600"
+                className="bg-blue-600 text-white px-4 rounded-r hover:bg-blue-700"
               >
                 Subscribe
               </button>
@@ -133,8 +132,8 @@ export default function Footer() {
             &copy; 2023 CareerCraft. All rights reserved.
           </p>
           <div className="mt-2">
-            <a href="#" className="text-sm text-gray-300 hover:underline mx-2">Privacy Policy</a>
-            <a href="#" className="text-sm text-gray-300 hover:underline mx-2">Terms of Service</a>
+            <Link href="/privacy-policy" className="text-sm text-gray-300 hover:underline mx-2">Privacy Policy</Link>
+            <Link href="/terms-of-service" className="text-sm text-gray-300 hover:underline mx-2">Terms of Service</Link>
           </div>
         </div>
       </div>

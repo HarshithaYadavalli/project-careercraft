@@ -9,7 +9,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="p text-white" style={{ backgroundColor: '#C3C079' }}>
+    <header className="p text-white" style={{ backgroundColor: '#012130' }}>
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/">
           <div className="flex items-center mb-4">
@@ -24,7 +24,7 @@ export default function Header() {
         </Link>
 
         <nav>
-          <ul className="flex space-x-4 items-center text-m text-black mr-10">
+          <ul className="flex space-x-4 items-center text-m text-white mr-10">
             <li className="mx-2">
               <Link href="#footer" className="hover:underline">Contact Us</Link>
             </li>
@@ -37,7 +37,7 @@ export default function Header() {
             <li className="mx-2">
               <Link href="/signup" className="hover:underline">Register</Link>
             </li>
-            </ul>
+          </ul>
         </nav>
       </div>
     </header>
